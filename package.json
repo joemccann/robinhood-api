@@ -1,0 +1,33 @@
+{
+	"name": "@joemccann/robinhood-authentication",
+	"version": "1.0.0",
+	"description": "📈 Unofficial node.js package for authenticating into Robinhood.com.",
+	"main": "index.js",
+	"scripts": {
+		"pretest": "clear && standard .",
+		"test": "node test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "github.com/joemccann/robinhood-authentication"
+	},
+	"keywords": [
+		"robintrack",
+		"robinhood"
+	],
+	"author": "Joe McCann",
+	"license": "MIT",
+	"devDependencies": {
+		"standard": "^14.3.4",
+		"tape": "^5.0.1"
+	},
+	"dependencies": {
+		"dotenv": "^8.2.0",
+		"node-fetch": "^2.6.0",
+		"robinhood": "^1.6.5",
+		"speakeasy": "^2.0.0"
+	},
+	"directories": {
+		"test": "test"
+	}
+}
