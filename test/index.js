@@ -18,7 +18,6 @@ test('PASS: generate uuid', t => {
   t.ok(true)
   t.end()
 })
-/*
 
 test('PASS: generate mfa token', t => {
   try {
@@ -40,4 +39,3 @@ test('PASS: login - default', async t => {
   }
   t.ok(true)
 })
-*/
