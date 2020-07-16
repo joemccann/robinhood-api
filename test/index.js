@@ -8,7 +8,7 @@ test('sanity', t => {
   t.end()
 })
 
-test('PASS: mfa token', t => {
+test('PASS: generate mfa token', t => {
   try {
     const data = getMFAToken(process.env.QR)
     console.dir(data)
@@ -19,7 +19,6 @@ test('PASS: mfa token', t => {
   t.end()
 })
 
-/*
 test('PASS: login - default', async t => {
   try {
     const { data, err } = await login()
@@ -29,4 +28,3 @@ test('PASS: login - default', async t => {
   }
   t.ok(true)
 })
-*/
