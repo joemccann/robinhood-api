@@ -1,16 +1,28 @@
 require('dotenv').config()
 const test = require('tape')
 
-const { login, getMFAToken } = require('..')
+const { login, generateMFAToken, uuid } = require('..')
 
 test('sanity', t => {
   t.ok(true)
   t.end()
 })
 
+test('PASS: generate uuid', t => {
+  try {
+    const data = uuid()
+    console.dir(data)
+  } catch (e) {
+    console.error(e)
+  }
+  t.ok(true)
+  t.end()
+})
+/*
+
 test('PASS: generate mfa token', t => {
   try {
-    const data = getMFAToken(process.env.QR)
+    const data = generateMFAToken(process.env.QR)
     console.dir(data)
   } catch (e) {
     console.error(e)
@@ -28,3 +40,4 @@ test('PASS: login - default', async t => {
   }
   t.ok(true)
 })
+*/

@@ -1,10 +1,12 @@
 function i () {
-  var o = new Array(16)
-  for (var e, t = 0; t < 16; t++) {
-    (3 & t) == 0 && (e = 4294967296 * Math.random()),
-    o[t] = e >>> ((3 & t) << 3) & 255
+  var randoms = new Array(16)
+  for (let random, t = 0; t < 16; t++) {
+    if ((3 & t) === 0) {
+      (random = 4294967296 * Math.random())
+    }
+    randoms[t] = random >>> ((3 & t) << 3) & 255
   }
-  return o
+  return randoms
 }
 
 const a = (e, t) => {
