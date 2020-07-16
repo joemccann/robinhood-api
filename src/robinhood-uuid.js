@@ -1,49 +1,52 @@
-function randomNumbers () {
-  var randoms = new Array(16)
-  for (let random, t = 0; t < 16; t++) {
-    if ((3 & t) === 0) {
+const randomNumbers = () => {
+  const randoms = new Array(16)
+  for (let random, i = 0; i < 16; i++) {
+    if ((3 & i) === 0) {
       (random = 4294967296 * Math.random())
     }
-    randoms[t] = random >>> ((3 & t) << 3) & 255
+    randoms[i] = random >>> ((3 & i) << 3) & 255
   }
   return randoms
 }
 
-const uuid = (e) => {
+const uuid = (randoms) => {
   const hexa = []
+
   for (let i = 0; i < 256; ++i) {
     hexa[i] = (i + 256).toString(16).substr(1)
   }
+
   let index = 0
+
   return [
-    hexa[e[index++]],
-    hexa[e[index++]],
-    hexa[e[index++]],
-    hexa[e[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
     '-',
-    hexa[e[index++]],
-    hexa[e[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
     '-',
-    hexa[e[index++]],
-    hexa[e[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
     '-',
-    hexa[e[index++]],
-    hexa[e[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
     '-',
-    hexa[e[index++]],
-    hexa[e[index++]],
-    hexa[e[index++]],
-    hexa[e[index++]],
-    hexa[e[index++]],
-    hexa[e[index++]]].join('')
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]],
+    hexa[randoms[index++]]].join('')
 }
 
-module.exports = function generate (e = {}) {
-  var c = 0
-  var shiftedInts = []
-  var d
-  var randoms = randomNumbers()
-  var f = [
+module.exports = () => {
+  const shiftedInts = []
+  const randoms = randomNumbers()
+  let now = (new Date()).getTime()
+
+  const randomCollection = [
     1 | randoms[0],
     randoms[1],
     randoms[2],
@@ -52,28 +55,25 @@ module.exports = function generate (e = {}) {
     randoms[5]
   ]
 
-  if (!d) d = 16383 & (randoms[6] << 8 | randoms[7])
+  const wild = (16383 & (randoms[6] << 8 | randoms[7])) + 1 & 16383
+  const zany = (1e4 * (268435455 & (now += 122192928e5))) % 4294967296
+  const cool = now / 4294967296 * 1e4 & 268435455
 
-  var h = (new Date()).getTime()
+  let index = 0
 
-  d = d + 1 & 16383
+  shiftedInts[index++] = zany >>> 24 & 255
+  shiftedInts[index++] = zany >>> 16 & 255
+  shiftedInts[index++] = zany >>> 8 & 255
+  shiftedInts[index++] = 255 & zany
+  shiftedInts[index++] = cool >>> 8 & 255
+  shiftedInts[index++] = 255 & cool
+  shiftedInts[index++] = cool >>> 24 & 15 | 16
+  shiftedInts[index++] = cool >>> 16 & 255
+  shiftedInts[index++] = wild >>> 8 | 128
+  shiftedInts[index++] = 255 & wild
 
-  const y = (1e4 * (268435455 & (h += 122192928e5))) % 4294967296
-  const v = h / 4294967296 * 1e4 & 268435455
-
-  shiftedInts[c++] = y >>> 24 & 255
-  shiftedInts[c++] = y >>> 16 & 255
-  shiftedInts[c++] = y >>> 8 & 255
-  shiftedInts[c++] = 255 & y
-  shiftedInts[c++] = v >>> 8 & 255
-  shiftedInts[c++] = 255 & v
-  shiftedInts[c++] = v >>> 24 & 15 | 16
-  shiftedInts[c++] = v >>> 16 & 255
-  shiftedInts[c++] = d >>> 8 | 128
-  shiftedInts[c++] = 255 & d
-
-  for (var b = 0; b < 6; ++b) {
-    shiftedInts[c + b] = f[b]
+  for (let i = 0; i < 6; ++i) {
+    shiftedInts[index + i] = randomCollection[i]
   }
 
   return uuid(shiftedInts)
