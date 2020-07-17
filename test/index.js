@@ -16,7 +16,7 @@ test('sanity', t => {
 })
 
 let token = null
-const instrumentUUID = null
+let instrumentUUID = null
 
 test('PASS: login - default', async t => {
   try {
@@ -32,8 +32,6 @@ test('PASS: login - default', async t => {
   }
   t.end()
 })
-
-/*
 
 test('PASS: quote', async t => {
   const sym = 'AAPL'
@@ -57,6 +55,25 @@ test('PASS: quote', async t => {
   t.end()
 })
 
+test('FAIL: quote', async t => {
+  const sym = 'CTST'
+  const params = {
+    token,
+    symbol: sym
+  }
+
+  try {
+    const { data, statusCode = 999 } = await quote(params)
+    t.ok(data)
+    t.equals(data, 'Not Found')
+    t.equals(statusCode, 404)
+  } catch (e) {
+    console.error(e)
+  }
+  t.end()
+})
+
+/*
 test('PASS: instrument', async t => {
   const sym = 'AAPL'
   const params = {
