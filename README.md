@@ -1,62 +1,38 @@
-# Robintrack API
+# Robinhood API
 
-📈 Unofficial node.js client for accessing the APIs called on Robintrack.net.
+📈 Unofficial node.js client for accessing the APIs called on Robinhood.com.
 
 ## Installation
 
 ```sh
-npm i -S @joemccann/robintrack-api
+npm i -S @joemccann/robinhood-api
 ```
 
 ## Usage
 
-```js
-const rta = require('@joemccann/robintrack-api')
+Create a `.env` with the following:
 
-const params = {
-  method: 'largest_popularity_increases',
-  options: {
-    hours_ago: 48,
-    limit: 50,
-    percentage: true,
-    min_popularity: 50,
-    start_index: 0
-  }
-}
+```sh
+USERNAME=XXX
+PASSWORD=YYY
+QR=W3X54XFMMCBNO3ZF # From 2FA from Robinhood
+CLIENT_ID=c82SH0WZOsabOXGP2sxqcj34FxkvfnWRZBKlBjFS # From Robinhood
+```
+
+```js
+const { login } = require('@joemccann/robinhood-api')
 
 try {
-  const {
-    data = [],
-    statusCode = 0
-  } = await rta(params)
-  console.dir(data) // [...]
+  const { data, statusCode } = await login()
+  console.dir(data)
   console.log(statusCode) // 200
-}
-catch(e){
+} catch (e) {
   console.error(e)
 }
 ```
 
-### Supported Methods
-
-- `largest_popularity_changes`
-- `largest_popularity_decreases`
-- `largest_popularity_increases`
-- `least_popular`
-- `total_symbols`
-- `most_popular`
-
-### Support Options
-
-- `hours_ago`
-- `limit`
-- `percentage`
-- `min_popularity`
-- `start_index`
-
-NOTE: The method `total_symbols` doesn't support _any_ options.
-
-For more information on the requests and responses view the [test](test/index.js) file.
+For more information on the requests and responses view the
+[test](test/index.js) file.
 
 ## Tests
 
