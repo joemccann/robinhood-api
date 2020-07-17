@@ -12,8 +12,8 @@ const {
 //
 const creds = {
   c: process.env.CLIENT_ID,
-  u: process.env.USERNAME,
-  p: process.env.PASSWORD,
+  u: process.env.U, // "USER" is reserved for Node.js
+  p: process.env.PASS,
   t: process.env.TOKEN,
   q: process.env.QR
 }
@@ -53,6 +53,8 @@ const login = async () => {
       method: 'POST',
       mode: 'cors'
     })
+
+    // TODO: FIX FOR "data.detail = Unable to log in with provided credentials."
 
     if (!resp.status > 399) {
       throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)

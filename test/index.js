@@ -16,7 +16,7 @@ test('sanity', t => {
 })
 
 let token = null
-let instrumentUUID = null
+const instrumentUUID = null
 
 test('PASS: login - default', async t => {
   try {
@@ -32,6 +32,8 @@ test('PASS: login - default', async t => {
   }
   t.end()
 })
+
+/*
 
 test('PASS: quote', async t => {
   const sym = 'AAPL'

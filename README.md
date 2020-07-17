@@ -15,8 +15,8 @@ npm i -S @joemccann/robinhood-api
 Create a `.env` with the following:
 
 ```sh
-USERNAME=XXX
-PASSWORD=YYY
+USER=XXX
+PASS=YYY
 QR=ZZZ # From 2FA from Robinhood
 CLIENT_ID=c82SH0WZOsabOXGP2sxqcj34FxkvfnWRZBKlBjFS # From Robinhood
 ```
