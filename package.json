@@ -23,7 +23,6 @@
 	},
 	"dependencies": {
 		"dotenv": "^8.2.0",
-		"hex2dec": "^1.1.2",
 		"node-fetch": "^2.6.0",
 		"robinhood": "^1.6.5",
 		"speakeasy": "^2.0.0"
