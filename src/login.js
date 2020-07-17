@@ -54,14 +54,14 @@ const login = async () => {
       mode: 'cors'
     })
 
-    if (!resp.ok) {
+    if (!resp.status > 399) {
       throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)
     }
 
     data = await resp.json()
   } catch (e) {
     if (resp.status === 404) return { statusCode: 404 }
-    console.error(e)
+    console.error(e.message)
     throw e
   }
   return { data, statusCode: resp.status }
