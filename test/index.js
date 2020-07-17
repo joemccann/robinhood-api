@@ -16,7 +16,7 @@ test('sanity', t => {
 })
 
 let token = null
-let instrument = null
+let instrumentUUID = null
 
 test('PASS: login - default', async t => {
   try {
@@ -34,18 +34,21 @@ test('PASS: login - default', async t => {
 })
 
 test('PASS: quote', async t => {
+  const sym = 'AAPL'
   const params = {
     token,
-    ticker: 'AAPL'
+    symbol: sym
   }
 
   try {
     const { data, statusCode } = await quote(params)
-    // t.ok(data)
-    console.dir(data)
-    console.log(statusCode)
-		t.equals(statusCode, 200)
-		instrument = data.instrument
+    t.ok(data)
+    const { symbol = '', instrument = '' } = data
+    t.same(instrument,
+      'https://api.robinhood.com/instruments/450dfc6d-5510-4d40-abfb-f633b7d9be3e/')
+    t.same(symbol, sym)
+    t.equals(statusCode, 200)
+    instrumentUUID = instrument.split('/')[4]
   } catch (e) {
     console.error(e)
   }
@@ -53,15 +56,19 @@ test('PASS: quote', async t => {
 })
 
 test('PASS: instrument', async t => {
+  const sym = 'AAPL'
   const params = {
     token,
-    ticker: 'AAPL'
+    symbol: sym,
+    instrument: instrumentUUID
   }
 
   try {
     const { data, statusCode } = await instrument(params)
     t.ok(data)
-    console.dir(data)
+    const { id = '', symbol = '' } = data
+    t.same(id, instrumentUUID)
+    t.same(symbol, sym)
     t.true(statusCode, 200)
   } catch (e) {
     console.error(e)
@@ -72,7 +79,7 @@ test('PASS: instrument', async t => {
 // test('PASS: popularity', async t => {
 //   const params = {
 //     token,
-//     ticker: 'AAPL'
+//     symbol: 'AAPL'
 //   }
 
 //   try {
