@@ -15,7 +15,7 @@ Create a `.env` with the following:
 ```sh
 USERNAME=XXX
 PASSWORD=YYY
-QR=W3X54XFMMCBNO3ZF # From 2FA from Robinhood
+QR=ZZZ # From 2FA from Robinhood
 CLIENT_ID=c82SH0WZOsabOXGP2sxqcj34FxkvfnWRZBKlBjFS # From Robinhood
 ```
 
