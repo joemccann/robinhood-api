@@ -1,6 +1,6 @@
 {
 	"name": "@joemccann/robinhood-api",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "📈 Unofficial node.js package for the Robinhood.com API.",
 	"main": "index.js",
 	"scripts": {
