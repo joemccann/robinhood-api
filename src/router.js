@@ -1,10 +1,10 @@
 const fetch = require('node-fetch')
 
-const quote = async ({ token = '', ticker = '' }) => {
+const quote = async ({ token = '', symbol = '' }) => {
   if (!token) throw new Error('Missing required parameter "token"')
-  if (!ticker) throw new Error('Missing required parameter "ticker"')
+  if (!symbol) throw new Error('Missing required parameter "symbol"')
 
-  const URL = `https://api.robinhood.com/quotes/${ticker}/`
+  const URL = `https://api.robinhood.com/quotes/${symbol}/`
 
   let resp = null
   let data = null
@@ -39,11 +39,12 @@ const quote = async ({ token = '', ticker = '' }) => {
   return { data, statusCode: resp.status }
 }
 
-const instrument = async ({ token = '', ticker = '' }) => {
+const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
   if (!token) throw new Error('Missing required parameter "token"')
-  if (!ticker) throw new Error('Missing required parameter "ticker"')
+  if (!symbol) throw new Error('Missing required parameter "symbol"')
+  if (!instrument) throw new Error('Missing required parameter "instrument"')
 
-  const URL = `https://api.robinhood.com/instruments/${ticker}`
+  const URL = `https://api.robinhood.com/instruments/${instrument}`
 
   let resp = null
   let data = null
@@ -78,11 +79,11 @@ const instrument = async ({ token = '', ticker = '' }) => {
   return { data, statusCode: resp.status }
 }
 
-const popularity = async ({ token = '', ticker = '' }) => {
+const popularity = async ({ token = '', symbol = '' }) => {
   if (!token) throw new Error('Missing required parameter "token"')
-  if (!ticker) throw new Error('Missing required parameter "ticker"')
+  if (!symbol) throw new Error('Missing required parameter "symbol"')
 
-  const URL = `https://api.robinhood.com/instruments/${ticker}/popularity`
+  const URL = `https://api.robinhood.com/instruments/${symbol}/popularity`
 
   let resp = null
   let data = null
