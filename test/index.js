@@ -1,7 +1,11 @@
 require('dotenv').config()
 const test = require('tape')
 
-const { login, generateMFAToken, uuid } = require('..')
+const {
+  login,
+  generateMFAToken,
+  uuid
+} = require('..')
 
 test('sanity', t => {
   t.ok(true)
@@ -9,33 +13,36 @@ test('sanity', t => {
 })
 
 test('PASS: generate uuid', t => {
-  try {
-    const data = uuid()
-    console.dir(data)
-  } catch (e) {
-    console.error(e)
-  }
-  t.ok(true)
+  const data = uuid()
+  t.equals(data.length, 36)
   t.end()
 })
 
 test('PASS: generate mfa token', t => {
+  const data = generateMFAToken(process.env.QR)
+  t.equals(data.length, 6)
+  t.end()
+})
+
+test('FAIL: generate mfa token', t => {
   try {
-    const data = generateMFAToken(process.env.QR)
-    console.dir(data)
+    generateMFAToken()
   } catch (e) {
-    console.error(e)
+    t.equal(e.message, 'Missing required parameter "secret"')
   }
-  t.ok(true)
   t.end()
 })
 
 test('PASS: login - default', async t => {
   try {
-    const { data, err } = await login()
-    console.dir(data)
+    const { data, statusCode } = await login()
+    t.ok(data)
+    t.true(data.expires_in > 0)
+    t.equals(data.scope, 'internal')
+    t.equals(data.token_type, 'Bearer')
+    t.true(statusCode, 200)
   } catch (e) {
     console.error(e)
   }
-  t.ok(true)
+  t.end()
 })
