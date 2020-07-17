@@ -27,13 +27,12 @@ const quote = async ({ token = '', symbol = '' }) => {
     })
 
     if (resp.status > 399) {
-      throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)
+      throw new Error(resp.statusText)
     }
 
     data = await resp.json()
   } catch (e) {
-    if (resp.status === 404) return { statusCode: 404 }
-    console.error(e.message)
+    if (resp.status === 404) return { data: e.message, statusCode: 404 }
     throw e
   }
   return { data, statusCode: resp.status }
