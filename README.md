@@ -2,6 +2,8 @@
 
 📈 Unofficial node.js client for accessing the APIs called on Robinhood.com.
 
+> NOTE: THIS IS A WORK IN PROGRESS AND NOT RECOMMENDED FOR ANY USAGE BEYOND TINKERING.
+
 ## Installation
 
 ```sh
