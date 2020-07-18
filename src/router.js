@@ -78,11 +78,11 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
   return { data, statusCode: resp.status }
 }
 
-const popularity = async ({ token = '', symbol = '' }) => {
+const popularity = async ({ token = '', instrument = '' }) => {
   if (!token) throw new Error('Missing required parameter "token"')
-  if (!symbol) throw new Error('Missing required parameter "symbol"')
+  if (!instrument) throw new Error('Missing required parameter "instrument"')
 
-  const URL = `https://api.robinhood.com/instruments/${symbol}/popularity`
+  const URL = `https://api.robinhood.com/instruments/${instrument}/popularity`
 
   let resp = null
   let data = null
@@ -108,11 +108,10 @@ const popularity = async ({ token = '', symbol = '' }) => {
       throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)
     }
 
-    data = await resp.text()
+    data = await resp.json()
   } catch (e) {
-    if (resp.status === 404) return { statusCode: 404 }
-    console.error(e.message)
-    throw e
+    console.error(e)
+    return { data: e.message, statusCode: resp.status }
   }
   return { data, statusCode: resp.status }
 }

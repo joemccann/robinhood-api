@@ -55,6 +55,25 @@ test('PASS: quote', async t => {
   t.end()
 })
 
+test('PASS: popularity', async t => {
+  const params = {
+    token,
+    instrument: instrumentUUID
+  }
+
+  try {
+    const { data, statusCode } = await popularity(params)
+    t.ok(data)
+    const { instrument = '', num_open_positions: num = 0 } = data
+    t.same(instrument, 'https://api.robinhood.com/instruments/450dfc6d-5510-4d40-abfb-f633b7d9be3e/')
+    t.true(num > 0)
+    t.equals(statusCode, 200)
+  } catch (e) {
+    console.error(e)
+  }
+  t.end()
+})
+/*
 test('FAIL: quote', async t => {
   const sym = 'CTST'
   const params = {
