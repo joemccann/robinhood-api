@@ -32,9 +32,10 @@ const quote = async ({ token = '', symbol = '' }) => {
 
     data = await resp.json()
   } catch (e) {
-    if (resp.status === 404) return { data: e.message, statusCode: 404 }
-    throw e
+    console.error(e)
+    return { data: e.message, statusCode: resp.status }
   }
+
   return { data, statusCode: resp.status }
 }
 
@@ -71,9 +72,8 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
 
     data = await resp.json()
   } catch (e) {
-    if (resp.status === 404) return { statusCode: 404 }
-    console.error(e.message)
-    throw e
+    console.error(e)
+    return { data: e.message, statusCode: resp.status }
   }
   return { data, statusCode: resp.status }
 }
