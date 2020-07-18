@@ -2,8 +2,16 @@
 const fs = require('fs')
 const path = require('path')
 const fetch = require('node-fetch')
+const { resolve } = require('path')
 const args = process.argv.slice(2)
 const symbols = []
+
+const chunk = (arr, chunkSize = 1, cache = []) => {
+  const tmp = [...arr]
+  if (chunkSize <= 0) return cache
+  while (tmp.length) cache.push(tmp.splice(0, chunkSize))
+  return cache
+}
 
 const sleep = (ms = 1000) => {
   return new Promise(resolve => {
@@ -27,6 +35,48 @@ const buildPairsFile = async () => {
       .resolve(__dirname, './pairs.json'), JSON.stringify(symbols), 'utf-8')
 }
 
+const results = []
+
+const batch = async () => {
+  const file = await fs
+    .readFileSync(path.resolve(__dirname, './pairs.json'), 'utf-8')
+
+  const pairs = JSON.parse(file)
+
+  const BATCH_SIZE = 5
+
+  const allFiles = pairs.slice(0, 30)
+
+  const i = 0
+
+  for (const pair of allFiles) {
+    console.log('symbol:', pair.symbol)
+    const { symbol } = pair
+    const url = [
+      'https://rh-api-instrument-from-symbol.azurewebsites.net',
+      'api',
+      'instrument?symbol={}'.replace('{}', symbol)]
+      .join('/')
+
+    if (i && i % 5) await sleep(10000)
+    try {
+      const resp = await fetch(url)
+      // if (resp && resp.status && resp.status === 200) {
+      const { body, status } = await resp.json()
+      if (status === 200) results.push({ symbol, instrument: body })
+      console.log('body', body)
+      console.log('status', status)
+      // console.log(`Fetched URL: ${url}`)
+      // } else console.log(resp)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  await fs.writeFileSync(path
+    .resolve(__dirname, './result.json'),
+  JSON.stringify(results), 'utf-8')
+}
 //
 // WIP
 //
@@ -39,7 +89,6 @@ const fetchInstrumentForSymbol = async () => {
   const proms = []
 
   const send = async (pair) => {
-    if (i % 5) await sleep(3000)
     if (i > 50) return { data: null }
     const { symbol } = pair
     const URL = 'https://rh-api-instrument-from-symbol.azurewebsites.net/api/' +
@@ -47,8 +96,14 @@ const fetchInstrumentForSymbol = async () => {
 
     let json = null
     let resp = null
+    console.log(`>>> Fetching ${symbol}`)
+
+    if (!(i % 3)) {
+      console.log('...sleeping...')
+      await sleep(2000)
+    }
+
     try {
-      console.log(`>>> Fetching ${symbol}`)
       resp = await fetch(URL)
       if (!resp) {
         console.log('$$$$ NO RESPONSE $$$$')
@@ -86,7 +141,7 @@ const fetchInstrumentForSymbol = async () => {
 
   let i = 0
   for (const pair of pairs) {
-    proms.push(send(pair), i++)
+    proms.push(await send(pair), i++)
   }
 
   const result = []
@@ -95,7 +150,7 @@ const fetchInstrumentForSymbol = async () => {
     //
     // Flatten the results as one array
     //
-    (await Promise.all(proms)).map(r => {
+    (Promise.all(proms)).map(r => {
       //
       // In the case r is undefined or null
       //
@@ -125,7 +180,7 @@ const run = async () => {
     console.info('✓ Built pairs.json file.')
   }
   try {
-    await fetchInstrumentForSymbol()
+    await batch()
   } catch (e) {
     console.error(e)
   }

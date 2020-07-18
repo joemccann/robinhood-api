@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"pretest": "clear && standard .",
+		"prebuild": "clear",
 		"test": "node test",
 		"build": "node bin/"
 	},
