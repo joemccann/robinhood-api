@@ -15,7 +15,8 @@ const creds = {
   u: process.env.U, // "USER" is reserved for Node.js
   p: process.env.PASS,
   t: process.env.TOKEN,
-  q: process.env.QR
+  q: process.env.QR,
+  v: process.env.VERSION || '1.315.0'
 }
 
 const login = async () => {
@@ -45,7 +46,7 @@ const login = async () => {
         'sec-fetch-dest': 'empty',
         'sec-fetch-mode': 'cors',
         'sec-fetch-site': 'same-site',
-        'x-robinhood-api-version': '1.315.0'
+        'x-robinhood-api-version': creds.v
       },
       referrer: 'https://robinhood.com/',
       referrerPolicy: 'strict-origin-when-cross-origin',

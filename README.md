@@ -19,6 +19,7 @@ U=XXX
 PASS=YYY
 QR=ZZZ # From 2FA from Robinhood
 CLIENT_ID=c82SH0WZOsabOXGP2sxqcj34FxkvfnWRZBKlBjFS # From Robinhood
+RH_API_VERSION=1.403.0 # Optional, defaults to 1.315.0
 ```
 
 ```js

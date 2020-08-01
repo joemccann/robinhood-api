@@ -1,6 +1,26 @@
 const fetch = require('node-fetch')
 
-const quote = async ({ token = '', symbol = '', version = '1.315.0' }) => {
+const version = process.env.VERSION || '1.315.0'
+
+const params = {
+  headers: {
+    accept: '*/*',
+    'accept-language': 'en-US,en;q=0.9',
+    'content-type': 'application/json',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-site',
+    'x-robinhood-api-version': version
+  },
+  referrer: 'https://robinhood.com/',
+  referrerPolicy: 'strict-origin-when-cross-origin',
+  mode: 'cors'
+}
+
+//
+// Authenticated endpoints
+//
+const quote = async ({ token = '', symbol = '' }) => {
   if (!token) throw new Error('Missing required parameter "token"')
   if (!symbol) throw new Error('Missing required parameter "symbol"')
 
@@ -9,22 +29,12 @@ const quote = async ({ token = '', symbol = '', version = '1.315.0' }) => {
   let resp = null
   let data = null
 
+  if (!params.headers.Authorization) {
+    params.headers.Authorization = 'Bearer ' + token
+  }
+
   try {
-    resp = await fetch(URL, {
-      headers: {
-        accept: '*/*',
-        'accept-language': 'en-US,en;q=0.9',
-        'content-type': 'application/json',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site',
-        'x-robinhood-api-version': version,
-        Authorization: 'Bearer ' + token
-      },
-      referrer: 'https://robinhood.com/',
-      referrerPolicy: 'strict-origin-when-cross-origin',
-      mode: 'cors'
-    })
+    resp = await fetch(URL, params)
 
     if (resp.status > 399) {
       throw new Error(resp.statusText)
@@ -48,22 +58,12 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
   let resp = null
   let data = null
 
+  if (!params.headers.Authorization) {
+    params.headers.Authorization = 'Bearer ' + token
+  }
+
   try {
-    resp = await fetch(URL, {
-      headers: {
-        accept: '*/*',
-        'accept-language': 'en-US,en;q=0.9',
-        'content-type': 'application/json',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site',
-        'x-robinhood-api-version': '1.315.0', // TODO: DON'T HARDCODE
-        Authorization: 'Bearer ' + token
-      },
-      referrer: 'https://robinhood.com/',
-      referrerPolicy: 'strict-origin-when-cross-origin',
-      mode: 'cors'
-    })
+    resp = await fetch(URL, params)
 
     if (resp.status > 399) {
       throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)
@@ -76,8 +76,10 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
   return { data, statusCode: resp.status }
 }
 
-const popularity = async ({ token = '', instrument = '' }) => {
-  if (!token) throw new Error('Missing required parameter "token"')
+//
+// Public endpoints
+//
+const popularity = async ({ instrument = '' }) => {
   if (!instrument) throw new Error('Missing required parameter "instrument"')
 
   const URL = `https://api.robinhood.com/instruments/${instrument}/popularity`
@@ -86,21 +88,7 @@ const popularity = async ({ token = '', instrument = '' }) => {
   let data = null
 
   try {
-    resp = await fetch(URL, {
-      headers: {
-        accept: '*/*',
-        'accept-language': 'en-US,en;q=0.9',
-        'content-type': 'application/json',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'same-site',
-        'x-robinhood-api-version': '1.315.0',
-        Authorization: 'Bearer ' + token
-      },
-      referrer: 'https://robinhood.com/',
-      referrerPolicy: 'strict-origin-when-cross-origin',
-      mode: 'cors'
-    })
+    resp = await fetch(URL, params)
 
     if (resp.status > 399) {
       throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)

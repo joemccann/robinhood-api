@@ -55,25 +55,6 @@ test('PASS: quote', async t => {
   t.end()
 })
 
-test('PASS: popularity', async t => {
-  const params = {
-    token,
-    instrument: instrumentUUID
-  }
-
-  try {
-    const { data, statusCode } = await popularity(params)
-    t.ok(data)
-    const { instrument = '', num_open_positions: num = 0 } = data
-    t.same(instrument, 'https://api.robinhood.com/instruments/450dfc6d-5510-4d40-abfb-f633b7d9be3e/')
-    t.true(num > 0)
-    t.equals(statusCode, 200)
-  } catch (e) {
-    console.error(e)
-  }
-  t.end()
-})
-/*
 test('FAIL: quote', async t => {
   const sym = 'CTST'
   const params = {
@@ -92,7 +73,37 @@ test('FAIL: quote', async t => {
   t.end()
 })
 
-/*
+test('PASS: popularity', async t => {
+  const params = {
+    instrument: instrumentUUID
+  }
+
+  try {
+    const { data, statusCode } = await popularity(params)
+    t.ok(data)
+    const { instrument = '', num_open_positions: num = 0 } = data
+    t.same(instrument, 'https://api.robinhood.com/instruments/450dfc6d-5510-4d40-abfb-f633b7d9be3e/')
+    t.true(num > 0)
+    t.equals(statusCode, 200)
+  } catch (e) {
+    console.error(e)
+  }
+  t.end()
+})
+
+test('FAIL: popularity (missing instrument parameter)', async t => {
+  const params = {
+    nope: 'not here'
+  }
+
+  try {
+    await popularity(params)
+  } catch (e) {
+    t.equals(e.message, 'Missing required parameter "instrument"')
+  }
+  t.end()
+})
+
 test('PASS: instrument', async t => {
   const sym = 'AAPL'
   const params = {
@@ -114,24 +125,17 @@ test('PASS: instrument', async t => {
   t.end()
 })
 
-// test('PASS: popularity', async t => {
-//   const params = {
-//     token,
-//     symbol: 'AAPL'
-//   }
+test('FAIL: instrument (missing token parameter)', async t => {
+  const params = {}
 
-//   try {
-//     const { data, statusCode } = await popularity(params)
-//     t.ok(data)
-//     console.dir(data)
-//     t.equals(statusCode, 200)
-//   } catch (e) {
-//     console.error(e)
-//   }
-//   t.end()
-// })
+  try {
+    await instrument(params)
+  } catch (e) {
+    t.equals(e.message, 'Missing required parameter "token"')
+  }
+  t.end()
+})
 
-/*
 test('PASS: generate uuid', t => {
   const data = uuid()
   t.equals(data.length, 36)
@@ -166,4 +170,3 @@ test('PASS: login - default', async t => {
   }
   t.end()
 })
-*/
