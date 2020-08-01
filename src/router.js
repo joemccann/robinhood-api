@@ -1,6 +1,6 @@
 const fetch = require('node-fetch')
 
-const quote = async ({ token = '', symbol = '' }) => {
+const quote = async ({ token = '', symbol = '', version = '1.315.0' }) => {
   if (!token) throw new Error('Missing required parameter "token"')
   if (!symbol) throw new Error('Missing required parameter "symbol"')
 
@@ -18,7 +18,7 @@ const quote = async ({ token = '', symbol = '' }) => {
         'sec-fetch-dest': 'empty',
         'sec-fetch-mode': 'cors',
         'sec-fetch-site': 'same-site',
-        'x-robinhood-api-version': '1.315.0',
+        'x-robinhood-api-version': version,
         Authorization: 'Bearer ' + token
       },
       referrer: 'https://robinhood.com/',
@@ -32,7 +32,6 @@ const quote = async ({ token = '', symbol = '' }) => {
 
     data = await resp.json()
   } catch (e) {
-    console.error(e)
     return { data: e.message, statusCode: resp.status }
   }
 
@@ -58,7 +57,7 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
         'sec-fetch-dest': 'empty',
         'sec-fetch-mode': 'cors',
         'sec-fetch-site': 'same-site',
-        'x-robinhood-api-version': '1.315.0',
+        'x-robinhood-api-version': '1.315.0', // TODO: DON'T HARDCODE
         Authorization: 'Bearer ' + token
       },
       referrer: 'https://robinhood.com/',
@@ -72,7 +71,6 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
 
     data = await resp.json()
   } catch (e) {
-    console.error(e)
     return { data: e.message, statusCode: resp.status }
   }
   return { data, statusCode: resp.status }
@@ -110,7 +108,6 @@ const popularity = async ({ token = '', instrument = '' }) => {
 
     data = await resp.json()
   } catch (e) {
-    console.error(e)
     return { data: e.message, statusCode: resp.status }
   }
   return { data, statusCode: resp.status }

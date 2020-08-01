@@ -11,7 +11,7 @@ const randomNumbers = () => {
   return randoms
 }
 
-const uuidFactory = (randoms) => {
+const hexUuid = (randoms) => {
   const hexa = []
 
   for (let i = 0; i < 256; ++i) {
@@ -45,6 +45,7 @@ const uuidFactory = (randoms) => {
 
 const uuid = () => {
   const shiftedInts = []
+
   const randoms = randomNumbers()
   let now = (new Date()).getTime()
 
@@ -78,7 +79,7 @@ const uuid = () => {
     shiftedInts[index + i] = randomCollection[i]
   }
 
-  return uuidFactory(shiftedInts)
+  return hexUuid(shiftedInts)
 }
 
 const generateMFAToken = (secret) => {

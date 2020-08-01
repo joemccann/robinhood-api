@@ -63,7 +63,6 @@ const login = async () => {
     data = await resp.json()
   } catch (e) {
     if (resp.status === 404) return { statusCode: 404 }
-    console.error(e.message)
     throw e
   }
   return { data, statusCode: resp.status }
