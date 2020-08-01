@@ -27,8 +27,3 @@ schema:
 	"instrument":""
 }
 ```
-
-## TODO
-
-Add script to parse the `pairs.json` and fetch from Robinhood's API the
-instrument UUID and write a new file called `combined.json`.
