@@ -43,10 +43,11 @@ const quote = async ({ token = '', symbol = '' }) => {
 
     data = await resp.json()
   } catch (e) {
-    return { data: e.message, statusCode: resp.status }
+    const statusCode = resp.status || 500
+    return { data: e.message, statusCode }
   }
-
-  return { data, statusCode: resp.status }
+  const statusCode = resp.status || 500
+  return { data, statusCode }
 }
 
 const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
@@ -72,9 +73,11 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
 
     data = await resp.json()
   } catch (e) {
-    return { data: e.message, statusCode: resp.status }
+    const statusCode = resp.status || 500
+    return { data: e.message, statusCode }
   }
-  return { data, statusCode: resp.status }
+  const statusCode = resp.status || 500
+  return { data, statusCode }
 }
 
 //
@@ -97,9 +100,11 @@ const popularity = async ({ instrument = '' }) => {
 
     data = await resp.json()
   } catch (e) {
-    return { data: e.message, statusCode: resp.status }
+    const statusCode = resp.status || 500
+    return { data: e.message, statusCode }
   }
-  return { data, statusCode: resp.status }
+  const statusCode = resp.status || 500
+  return { data, statusCode }
 }
 
 const historicals = async ({ token = '', symbol = '', options = {} }) => {
@@ -133,9 +138,11 @@ const historicals = async ({ token = '', symbol = '', options = {} }) => {
 
     data = await resp.json()
   } catch (e) {
-    return { data: e.message, statusCode: resp.status }
+    const statusCode = resp.status || 500
+    return { data: e.message, statusCode }
   }
-  return { data, statusCode: resp.status }
+  const statusCode = resp.status || 500
+  return { data, statusCode }
 }
 
 module.exports = {
