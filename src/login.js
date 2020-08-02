@@ -58,7 +58,7 @@ const login = async () => {
     // TODO: FIX FOR "data.detail = Unable to log in with provided credentials."
 
     if (!resp.status > 399) {
-      throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)
+      throw new Error(resp.statusText)
     }
 
     data = await resp.json()
