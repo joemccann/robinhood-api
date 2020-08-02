@@ -7,6 +7,7 @@ const {
   instrument,
   popularity,
   quote,
+  historicals,
   uuid
 } = require('..')
 
@@ -27,6 +28,56 @@ test('PASS: login - default', async t => {
     t.equals(data.token_type, 'Bearer')
     t.equals(statusCode, 200)
     token = data.access_token
+  } catch (e) {
+    console.error(e)
+  }
+  t.end()
+})
+
+test('PASS: historicals', async t => {
+  const sym = 'AAPL'
+  const options = {
+    bounds: 'trading',
+    interval: '5minute',
+    span: 'day'
+  }
+  const params = {
+    token,
+    symbol: sym,
+    options
+  }
+
+  try {
+    const { data, statusCode } = await historicals(params)
+    t.ok(data)
+    const { symbol = '', bounds = '' } = data
+    t.same(symbol, sym)
+    t.same(bounds, options.bounds)
+    t.equals(statusCode, 200)
+  } catch (e) {
+    console.error(e)
+  }
+  t.end()
+})
+
+test('FAIL: historicals', async t => {
+  const sym = 'CTST'
+  const options = {
+    bounds: 'trading',
+    interval: '5minute',
+    span: 'day'
+  }
+  const params = {
+    token,
+    symbol: sym,
+    options
+  }
+
+  try {
+    const { data, statusCode = 999 } = await historicals(params)
+    t.ok(data)
+    t.equals(data, 'Not Found')
+    t.equals(statusCode, 404)
   } catch (e) {
     console.error(e)
   }

@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const qs = require('querystring')
 
 const version = process.env.VERSION || '1.315.0'
 
@@ -66,7 +67,7 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
     resp = await fetch(URL, params)
 
     if (resp.status > 399) {
-      throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)
+      throw new Error(resp.statusText)
     }
 
     data = await resp.json()
@@ -91,7 +92,43 @@ const popularity = async ({ instrument = '' }) => {
     resp = await fetch(URL, params)
 
     if (resp.status > 399) {
-      throw new Error(`Response not ok: ${resp.statusText} | ${resp.status}`)
+      throw new Error(resp.statusText)
+    }
+
+    data = await resp.json()
+  } catch (e) {
+    return { data: e.message, statusCode: resp.status }
+  }
+  return { data, statusCode: resp.status }
+}
+
+const historicals = async ({ token = '', symbol = '', options = {} }) => {
+  if (!token) throw new Error('Missing required parameter "token"')
+  if (!symbol) throw new Error('Missing required parameter "symbol"')
+
+  let URL = [
+    'https://api.robinhood.com',
+    'marketdata',
+    'historicals',
+    symbol].join('/')
+
+  if (Object.keys(options).length) {
+    // ?bounds=trading&interval=5minute&span=day
+    URL += '/?' + qs.stringify(options)
+  }
+
+  let resp = null
+  let data = null
+
+  if (!params.headers.Authorization) {
+    params.headers.Authorization = 'Bearer ' + token
+  }
+
+  try {
+    resp = await fetch(URL, params)
+
+    if (resp.status > 399) {
+      throw new Error(resp.statusText)
     }
 
     data = await resp.json()
@@ -104,5 +141,6 @@ const popularity = async ({ instrument = '' }) => {
 module.exports = {
   instrument,
   quote,
-  popularity
+  popularity,
+  historicals
 }
