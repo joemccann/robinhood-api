@@ -50,9 +50,8 @@ const quote = async ({ token = '', symbol = '' }) => {
   return { data, statusCode }
 }
 
-const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
+const instrument = async ({ token = '', instrument = '' }) => {
   if (!token) throw new Error('Missing required parameter "token"')
-  if (!symbol) throw new Error('Missing required parameter "symbol"')
   if (!instrument) throw new Error('Missing required parameter "instrument"')
 
   const URL = `https://api.robinhood.com/instruments/${instrument}`
@@ -63,33 +62,6 @@ const instrument = async ({ token = '', symbol = '', instrument = '' }) => {
   if (!params.headers.Authorization) {
     params.headers.Authorization = 'Bearer ' + token
   }
-
-  try {
-    resp = await fetch(URL, params)
-
-    if (resp.status > 399) {
-      throw new Error(resp.statusText)
-    }
-
-    data = await resp.json()
-  } catch (e) {
-    const statusCode = resp.status || 500
-    return { data: e.message, statusCode }
-  }
-  const statusCode = resp.status || 500
-  return { data, statusCode }
-}
-
-//
-// Public endpoints
-//
-const popularity = async ({ instrument = '' }) => {
-  if (!instrument) throw new Error('Missing required parameter "instrument"')
-
-  const URL = `https://api.robinhood.com/instruments/${instrument}/popularity`
-
-  let resp = null
-  let data = null
 
   try {
     resp = await fetch(URL, params)
@@ -145,9 +117,66 @@ const historicals = async ({ token = '', symbol = '', options = {} }) => {
   return { data, statusCode }
 }
 
+const fundamentals = async ({ token = '', symbol = '' }) => {
+  if (!token) throw new Error('Missing required parameter "token"')
+  if (!symbol) throw new Error('Missing required parameter "symbol"')
+
+  const URL = `https://api.robinhood.com/fundamentals/${symbol}/`
+
+  let resp = null
+  let data = null
+
+  if (!params.headers.Authorization) {
+    params.headers.Authorization = 'Bearer ' + token
+  }
+
+  try {
+    resp = await fetch(URL, params)
+
+    if (resp.status > 399) {
+      throw new Error(resp.statusText)
+    }
+
+    data = await resp.json()
+  } catch (e) {
+    const statusCode = resp.status || 500
+    return { data: e.message, statusCode }
+  }
+  const statusCode = resp.status || 500
+  return { data, statusCode }
+}
+
+//
+// Public endpoints
+//
+const popularity = async ({ instrument = '' }) => {
+  if (!instrument) throw new Error('Missing required parameter "instrument"')
+
+  const URL = `https://api.robinhood.com/instruments/${instrument}/popularity`
+
+  let resp = null
+  let data = null
+
+  try {
+    resp = await fetch(URL, params)
+
+    if (resp.status > 399) {
+      throw new Error(resp.statusText)
+    }
+
+    data = await resp.json()
+  } catch (e) {
+    const statusCode = resp.status || 500
+    return { data: e.message, statusCode }
+  }
+  const statusCode = resp.status || 500
+  return { data, statusCode }
+}
+
 module.exports = {
+  fundamentals,
+  historicals,
   instrument,
-  quote,
   popularity,
-  historicals
+  quote
 }

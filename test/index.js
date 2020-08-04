@@ -3,11 +3,12 @@ const test = require('tape')
 
 const {
   generateMFAToken,
-  login,
-  instrument,
-  popularity,
-  quote,
+  fundamentals,
   historicals,
+  instrument,
+  login,
+  quote,
+  popularity,
   uuid
 } = require('..')
 
@@ -28,6 +29,49 @@ test('PASS: login - default', async t => {
     t.equals(data.token_type, 'Bearer')
     t.equals(statusCode, 200)
     token = data.access_token
+  } catch (e) {
+    console.error(e)
+  }
+  t.end()
+})
+
+test('PASS: fundamentals', async t => {
+  const sym = 'AAPL'
+  const params = {
+    token,
+    symbol: sym
+  }
+
+  try {
+    const { data, statusCode } = await fundamentals(params)
+    t.ok(data)
+    const { year_founded: year = 0 } = data
+    t.same(year, 1976)
+    t.equals(statusCode, 200)
+  } catch (e) {
+    console.error(e)
+  }
+  t.end()
+})
+
+test('FAIL: fundamentals', async t => {
+  const sym = 'CTST'
+  const options = {
+    bounds: 'trading',
+    interval: '5minute',
+    span: 'day'
+  }
+  const params = {
+    token,
+    symbol: sym,
+    options
+  }
+
+  try {
+    const { data, statusCode = 999 } = await historicals(params)
+    t.ok(data)
+    t.equals(data, 'Not Found')
+    t.equals(statusCode, 404)
   } catch (e) {
     console.error(e)
   }
@@ -159,7 +203,6 @@ test('PASS: instrument', async t => {
   const sym = 'AAPL'
   const params = {
     token,
-    symbol: sym,
     instrument: instrumentUUID
   }
 
